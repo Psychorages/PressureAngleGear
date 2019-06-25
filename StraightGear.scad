@@ -22,31 +22,26 @@ nbDt2=11;
 //% of one tooth rotation
 pctDt=0.0;
 
-gearPrm1 = gearPrm("1","lightblue",nbDt1,3*m,m,alpha,holeD);
-gearPrm2 = gearPrm("2","lightgreen",nbDt2,3*m,m,alpha,holeD);
+gearPrm1 = gearPrm3D(nbDt1,3*m,m,alpha,holeD,bevel=0.3);
+gearPrm2 = gearPrm3D(nbDt2,3*m,m,alpha,holeD,bevel=0.3);
 
-// gearPrm1[HOLED_PRM]=22.5;
+r1=gearPrm1[G_RPITCH];
+r2=gearPrm2[G_RPITCH];
 
-r1=gearPrm1[R_PRM];
-r2=gearPrm2[R_PRM];
+color("lightblue")
+rotate([0,0,gearPrm1[G_STEP]*pctDt/100])
+    lightWeightGear3D (gearPrm1);
 
-
-rotate([0,0,rotation(pctDt,gearPrm1)])
-gear(gearPrm1);
-
-
+color("lightgreen")
 translate([r1+r2,0,])
-rotate([0,0,rotation(pctDt,gearPrm2,true)])
-gear(gearPrm2);
-
-function rotation(pctDt,gearPrm,inv=false)=((inv?-1:1)*360/gearPrm[NBTOOTH_PRM]*pctDt)-(m/4/(2*gearPrm[R_PRM])*360+gearPrm[PTDEG_PRM]);
-
+rotate([0,0,-gearPrm2[G_STEP]*pctDt/100])
+    lightWeightGear3D (gearPrm2);
 
 echo(r12=r1+r2);
 echo(holeR=holeD/2);
 echo(minrs=2/7*(r1-holeD/2)+holeD/2);
 
-//cylinder(d=22,h=3*m);
+// cylinder(d=22,h=3*m);
 
 module pole(){
 	difference(){
@@ -59,7 +54,7 @@ module pole(){
 	}
 }
 
-*translate([83/2,0,0]){
+translate([83/2,0,0]){
 	difference(){
 		union(){
 			translate([-83/2,0,0])pole();
